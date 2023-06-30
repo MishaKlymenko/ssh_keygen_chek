@@ -11,13 +11,23 @@ jobs:
 
       - name: Verify SSH Keys
         run: |
+          rsa_key_found=false
+          ed25519_key_found=false
+
           for key_file in $(ls keys/*.pub); do
             key_info=$(ssh-keygen -l -f $key_file)
             if [[ $key_info == *"RSA"* && $key_info == *"2048"* ]]; then
-              echo "RSA key (2048-bit): $key_file"
+              rsa_key_found=true
             elif [[ $key_info == *"ED25519"* && $key_info == *"4096"* ]]; then
-              echo "ED25519 key (4096-bit): $key_file"
+              ed25519_key_found=true
             else
               echo "Invalid key: $key_file"
             fi
           done
+
+          if [[ $rsa_key_found == true && $ed25519_key_found == true ]]; then
+            echo "All required key types present."
+          else
+            echo "One or more key types missing."
+            exit 1
+          fi
