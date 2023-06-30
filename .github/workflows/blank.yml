@@ -1,40 +1,23 @@
-# This is a basic workflow to help you get started with Actions
+name: Check SSH Keys
+on: [push, pull_request]
 
-name: CI
-
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  decrypt:
+  check-ssh-keys:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Check existence of public keys
+      - name: Verify SSH Keys
         run: |
-          ls -l *.pub
-
-      - name: Decrypt message with RSA key
-        run: |
-          openssl rsautl -decrypt -inkey rsa_key -in encrypted.txt -out decrypted.txt
-
-      - name: Verify decrypted message
-        run: |
-          decrypted_message=$(cat decrypted.txt)
-          if [ "$decrypted_message" == "DevOps це не професія а спосіб мислення" ]; then
-            echo "Decryption successful. The decrypted message matches the original message."
-          else
-            echo "Decryption failed. The decrypted message does not match the original message."
-          fi
+          for key_file in $(ls path/to/*.pub); do
+            key_info=$(ssh-keygen -l -f $key_file)
+            if [[ $key_info == *"RSA"* && $key_info == *"2048"* ]]; then
+              echo "RSA key (2048-bit): $key_file"
+            elif [[ $key_info == *"ED25519"* && $key_info == *"4096"* ]]; then
+              echo "ED25519 key (4096-bit): $key_file"
+            else
+              echo "Invalid key: $key_file"
+            fi
+          done
