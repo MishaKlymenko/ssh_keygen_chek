@@ -11,7 +11,7 @@ jobs:
 
       - name: Verify SSH Keys
         run: |
-          for key_file in $(ls /keys/*.pub); do
+          for key_file in $(ls keys/*.pub); do
             key_info=$(ssh-keygen -l -f $key_file)
             if [[ $key_info == *"RSA"* && $key_info == *"2048"* ]]; then
               echo "RSA key (2048-bit): $key_file"
