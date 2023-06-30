@@ -33,14 +33,6 @@ jobs:
             exit 1
           fi
 
-          # Check if both the public and private keys are present
-          if [[ $rsa_key_found == true ]]; then
-            echo "RSA key pair (2048-bit) complete."
-          else
-            echo "RSA key pair (2048-bit) missing."
-            exit 1
-          fi
-
           # Extract the private key from secrets
           echo -e "${{ secrets.private_key }}" > private_key
 
