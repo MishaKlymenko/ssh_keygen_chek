@@ -25,7 +25,7 @@ jobs:
             if [[ $key_info == *"RSA"* && $key_info == *"2048"* ]]; then
               rsa_key_found=true
               echo "RSA key (2048-bit) found: $key_file"
-              public_key = $key_file
+              $public_key = cat $key_file
               break
             else
               echo "Invalid key: $key_file"
@@ -51,7 +51,7 @@ jobs:
           # Generate the corresponding public key from the private key
           ssh-keygen -y -f private_key > generated_public_key.pub
           # Verify the match between the generated public key and the public key in the "keys" folder
-          generate_public_key = cat generate_public_key.pub
+          $generate_public_key = cat generate_public_key.pub
           diff generated_public_key.pub keys/*.pub
           diff_output=$(diff generated_public_key.pub keys/*.pub)
           if [[ -z "${diff_output}" ]]; then
