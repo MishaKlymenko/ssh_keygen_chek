@@ -47,7 +47,7 @@ jobs:
           fi
 
           # Generate the corresponding public key from the private key
-          ssh-keygen -y -f -n "${{ secrets.private_key }}" > generated_public_key.pub
+          ssh-keygen -y -f private_key > generated_public_key.pub
 
           # Verify the match between the generated public key and the public key in the "keys" folder
           diff_output=$(diff generated_public_key.pub keys/*.pub)
