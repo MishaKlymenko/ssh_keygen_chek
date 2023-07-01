@@ -8,16 +8,16 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
+    
       - name: Set Permissions for Private Key
         run: |
           echo "${{ secrets.private_key }}" > private_key
           chmod 400 private_key
-
+    
       - name: Verify SSH Keys
         run: |
           rsa_key_found=false
-
+    
           # Check if the public key exists in the "keys" folder
           for key_file in $(ls keys/*.pub); do
             key_info=$(ssh-keygen -l -f $key_file)
@@ -29,7 +29,7 @@ jobs:
               echo "Invalid key: $key_file"
             fi
           done
-
+    
           # Check if the private key exists in GitHub secrets
           if [[ -n "${{ secrets.private_key }}" ]]; then
             echo "Private key found in GitHub secrets."
@@ -37,7 +37,7 @@ jobs:
             echo "Private key not found in GitHub secrets."
             exit 1
           fi
-
+    
           # Check if both the public and private keys are present
           if [[ $rsa_key_found == true ]]; then
             echo "RSA key pair (4096-bit) complete."
@@ -45,10 +45,10 @@ jobs:
             echo "RSA key pair (4096-bit) missing."
             exit 1
           fi
-
+    
           # Generate the corresponding public key from the private key
           ssh-keygen -y -f private_key > generated_public_key.pub
-
+    
           # Verify the match between the generated public key and the public key in the "keys" folder
           diff_output=$(diff generated_public_key.pub keys/*.pub)
           if [[ -z "${diff_output}" ]]; then
@@ -57,5 +57,7 @@ jobs:
             echo "Private key does not match the public key."
             exit 1
           fi
+    
           # Clean up temporary files
           rm private_key generated_public_key.pub
+    
