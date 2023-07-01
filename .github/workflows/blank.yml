@@ -24,6 +24,7 @@ jobs:
             if [[ $key_info == *"RSA"* && $key_info == *"2048"* ]]; then
               rsa_key_found=true
               echo "RSA key (2048-bit) found: $key_file"
+              cat $key_file
               break
             else
               echo "Invalid key: $key_file"
