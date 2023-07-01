@@ -52,6 +52,7 @@ jobs:
           cat generated_public_key.pub
 
           # Verify the match between the generated public key and the public key in the "keys" folder
+          diff generated_public_key.pub keys/*.pub
           diff_output=$(diff generated_public_key.pub keys/*.pub)
           if [[ -z "${diff_output}" ]]; then
             echo "Private key matches the public key."
