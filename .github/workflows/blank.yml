@@ -17,8 +17,8 @@ jobs:
       - name: Verify SSH Keys
         run: |
           rsa_key_found=false
-          public_key = ""
-          generate_public_key = ""
+          public_key = " "
+          generate_public_key = " "
           # Check if the public key exists in the "keys" folder
           for key_file in $(ls keys/*.pub); do
             key_info=$(ssh-keygen -l -f $key_file)
