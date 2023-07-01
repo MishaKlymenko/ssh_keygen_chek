@@ -48,9 +48,16 @@ jobs:
 
           # Generate the corresponding public key from the private key
           ssh-keygen -y -f private_key > generated_public_key.pub
-          # Verify the match between the generated public key and the public key in the "keys" folder
-          diff_output=$(diff cat generated_public_key.pub cat keys/*.pub)
-          if [[ -z "${diff_output}" ]]; then
+
+          # Read the contents of the generated public key file and remove leading/trailing whitespace and newlines
+          generated_public_key=$(cat generated_public_key.pub | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+
+          # Read the contents of the public key file in the "keys" folder and remove leading/trailing whitespace and newlines
+          key_file="keys/*.pub"
+          key_content=$(cat $key_file | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+
+          # Compare the values of the generated public key and the public key in the "keys" folder
+          if [[ "$generated_public_key" == "$key_content" ]]; then
             echo "Private key matches the public key."
           else
             echo "Private key does not match the public key."
