@@ -17,15 +17,13 @@ jobs:
       - name: Verify SSH Keys
         run: |
           rsa_key_found=false
-          $public_key = " "
-          $generate_public_key = " "
+
           # Check if the public key exists in the "keys" folder
           for key_file in $(ls keys/*.pub); do
             key_info=$(ssh-keygen -l -f $key_file)
             if [[ $key_info == *"RSA"* && $key_info == *"2048"* ]]; then
               rsa_key_found=true
               echo "RSA key (2048-bit) found: $key_file"
-              $public_key = cat $key_file
               break
             else
               echo "Invalid key: $key_file"
@@ -50,9 +48,9 @@ jobs:
 
           # Generate the corresponding public key from the private key
           ssh-keygen -y -f private_key > generated_public_key.pub
+          cat generated_public_key.pub
+
           # Verify the match between the generated public key and the public key in the "keys" folder
-          $generate_public_key = cat generate_public_key.pub
-          diff generated_public_key.pub keys/*.pub
           diff_output=$(diff generated_public_key.pub keys/*.pub)
           if [[ -z "${diff_output}" ]]; then
             echo "Private key matches the public key."
