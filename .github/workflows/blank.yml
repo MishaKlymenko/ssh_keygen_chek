@@ -48,6 +48,7 @@ jobs:
 
           # Generate the corresponding public key from the private key
           ssh-keygen -y -f private_key > generated_public_key.pub
+          echo cat generated_public_key.pub
 
           # Verify the match between the generated public key and the public key in the "keys" folder
           diff_output=$(diff generated_public_key.pub keys/*.pub)
