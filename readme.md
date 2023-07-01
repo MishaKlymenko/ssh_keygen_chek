@@ -1,6 +1,6 @@
 # Generating an SSH Key Pair
 
-To generate an SSH key pair (*public and private*), you need to use the **RSA** encryption algorithm with a length of **4096** bits.
+To generate an SSH key pair (*public and private*), you need to use the **RSA** encryption algorithm with a length of **2048** bits.
 
 ### After generating the keys, you need to upload them to the repository:
 * Upload the public key (the key with the .pub extension) to the "keys" folder.
