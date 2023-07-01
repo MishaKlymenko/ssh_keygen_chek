@@ -57,6 +57,5 @@ jobs:
             echo "Private key does not match the public key."
             exit 1
           fi
-
           # Clean up temporary files
           rm private_key generated_public_key.pub
